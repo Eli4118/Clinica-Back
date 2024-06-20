@@ -124,13 +124,13 @@ export const turno = {
 
 const calcularTurnos = (agenda, fechaInicial, now) => {
     //variables  
-    const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sábado'];
+    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
     const turnosDisponibles = {
-        "lunes": [],
-        "martes": [],
-        "miercoles": [],
-        "jueves": [],
-        "viernes": []
+        "Lunes": [],
+        "Martes": [],
+        "Miercoles": [],
+        "Jueves": [],
+        "Viernes": []
     };
     // Ajustar la fecha inicial si es sábado o domingo
     if (fechaInicial.getDay() === 6) { // Sábado
