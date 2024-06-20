@@ -3,10 +3,10 @@ export class turnoModel{
         //todos los turnos tomados 
     static  async getTurno (){
         let [result] = await pool.query(
-            "SELECT p.Nombre, p.Apellido, p.Documento, p.FechaNacimiento,p.ObraSocial,t.CodTurno,t.Horario,e.Estado,a.tipo  from turno t "+
-            " inner join paciente p on t.CodPaciente = p.CodPaciente" + 
-            " inner join tipodeatencion a on a.CodTipAtencion = t.CodTipAtencion" +
-            " inner join estadodelturno e on e.CodEstado = t.CodEstado;" 
+            "SELECT p.Nombre, p.Apellido, p.Documento, p.FechaNacimiento,p.ObraSocial,t.CodTurno,t.Horario,e.Estado,a.Tipo  from Turno t "+
+            " inner join Paciente p on t.CodPaciente = p.CodPaciente" + 
+            " inner join TipoDeAtencion a on a.CodTipAtencion = t.CodTipAtencion" +
+            " inner join EstadoDelTurno e on e.CodEstado = t.CodEstado;" 
             );        
         return result       
     }
@@ -14,9 +14,9 @@ export class turnoModel{
     //to do
     static  async getTurnoLibre (codMedPersonal){
         let [result] = await pool.query(
-            "SELECT a.lunes,a.martes,a.miercoles,a.jueves,a.viernes,a.TurnoTarde,a.TurnoMañana,a.TurnoCompleto,a.HorarioM,a.HorarioT,e.Jornada,e.TiempoTurno "+
-            " FROM medicopersonal m inner join agendaparticular a on m.CodMedPersonal = a.CodMedPersonal "+
-            " inner join especialidad e on m.CodEspecialidad = e.CodEspecialidad "+
+            "SELECT a.Lunes,a.Martes,a.Miercoles,a.Jueves,a.Viernes,a.TurnoTarde,a.TurnoMañana,a.TurnoCompleto,a.HorarioM,a.HorarioT,e.Jornada,e.TiempoTurno "+
+            " FROM MedicoPersonal m inner join AgendaParticular a on m.CodMedPersonal = a.CodMedPersonal "+
+            " inner join Especialidad e on m.CodEspecialidad = e.CodEspecialidad "+
             " where m.CodMedPersonal = ?", codMedPersonal );        
         return result       
     }
@@ -38,7 +38,7 @@ export class turnoModel{
     //un turno segun dni 
 static async getTurnoDni(dni) {
     const [result] = await pool.query(
-        "SELECT p.Nombre, p.Apellido, p.Documento, p.FechaNacimiento, p.ObraSocial, t.CodTurno, t.Horario, e.Estado, a.tipo, m.Costo AS Monto " +
+        "SELECT p.Nombre, p.Apellido, p.Documento, p.FechaNacimiento, p.ObraSocial, t.CodTurno, t.Horario, e.Estado, a.Tipo, m.Costo AS Monto " +
         "FROM Turno t " +
         "INNER JOIN Paciente p ON t.CodPaciente = p.CodPaciente " +
         "INNER JOIN TipoDeAtencion a ON a.CodTipAtencion = t.CodTipAtencion " +
@@ -52,7 +52,7 @@ static async getTurnoDni(dni) {
 
 static async getTurnoId(CodTurno) {
     const [result] = await pool.query(
-        "SELECT p.Nombre, p.Apellido, p.Documento, p.FechaNacimiento, p.ObraSocial, t.CodTurno, t.Horario, e.Estado, a.tipo, m.Costo AS Monto " +
+        "SELECT p.Nombre, p.Apellido, p.Documento, p.FechaNacimiento, p.ObraSocial, t.CodTurno, t.Horario, e.Estado, a.Tipo, m.Costo AS Monto " +
         "FROM Turno t " +
         "INNER JOIN Paciente p ON t.CodPaciente = p.CodPaciente " +
         "INNER JOIN TipoDeAtencion a ON a.CodTipAtencion = t.CodTipAtencion " +
@@ -152,11 +152,11 @@ static async getTurnoId(CodTurno) {
     
     static async getTurnosTomados(codMedPersonal, fechaInicial) {
     const query = `
-        SELECT fecha, horario, CodPaciente
-        FROM turno t  inner join agendadeatencion a on t.CodTurno = a.CodTurno
-        WHERE a.codMedPersonal = ?
-        AND DATE(t.fecha) >= ?
-        AND DATE(t.fecha) < DATE_ADD(?, INTERVAL 5 DAY)     
+        SELECT Fecha, Horario, CodPaciente
+        FROM Turno t  inner join AgendaDeAtencion a on t.CodTurno = a.CodTurno
+        WHERE a.CodMedPersonal = ?
+        AND DATE(t.Fecha) >= ?
+        AND DATE(t.Fecha) < DATE_ADD(?, INTERVAL 5 DAY)     
     `;
     const [result] = await pool.query(
         query, 
