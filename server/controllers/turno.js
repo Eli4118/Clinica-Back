@@ -190,35 +190,66 @@ const obtenerHorarios = (agenda, fecha, now) => {
 
 const filtrarTurnosTomados = (turnosDisponibles, turnosTomados) => {
     const turnosFiltrados = {};
-    // cambia el formato de la lista de turnos para el filtrado 
+    
+    // Zona horaria de la base de datos (Oregon, USA) UTC-7
+    const DB_OFFSET = -7 * 60; // en minutos
+    // Zona horaria de Argentina UTC-3
+    const ARG_OFFSET = -3 * 60; // en minutos
+
+    // Cambia el formato de la lista de turnos para el filtrado
     const turnosTomadosSet = new Set(turnosTomados.map(turno => {
         const fechaTurno = new Date(turno.fecha);
         const [horas, minutos, segundos] = turno.horario.split(':').map(Number);
         fechaTurno.setUTCHours(horas, minutos, segundos, 0);
-        return fechaTurno.toISOString();
+        
+        // Ajusta la hora de la base de datos a UTC
+        const dbTimeInUTC = new Date(fechaTurno.getTime() + DB_OFFSET * 60 * 1000);
+        // Convierte de UTC a Argentina
+        const argentinaTime = new Date(dbTimeInUTC.getTime() + ARG_OFFSET * 60 * 1000);
+        
+        return argentinaTime.toISOString();
     }));
+
     for (let dia in turnosDisponibles) {
         turnosFiltrados[dia] = turnosDisponibles[dia].filter(turno => {
-            return !turnosTomadosSet.has(turno.toISOString());
+            const turnoFecha = new Date(turno);
+            // Ajusta la hora de la base de datos a UTC
+            const dbTimeInUTC = new Date(turnoFecha.getTime() + DB_OFFSET * 60 * 1000);
+            // Convierte de UTC a Argentina
+            const argentinaTime = new Date(dbTimeInUTC.getTime() + ARG_OFFSET * 60 * 1000);
+
+            return !turnosTomadosSet.has(argentinaTime.toISOString());
         });
     }
+
     return turnosFiltrados;
 };
-//corta la hora del registro de la fecha y asigna la hora del turno
+
+// Corta la hora del registro de la fecha y asigna la hora del turno
 const sumarHoraAlDia = (turnos) => {
-        return turnos.map(turno => {
-          const fecha = new Date(turno.fecha);
-          // Restablecer la hora a 0 
-          fecha.setUTCHours(0, 0, 0, 0);  
-          // Sumar las horas, minutos y segundos a la fecha 
-          const [horas, minutos, segundos] = turno.Horario.split(':').map(Number);
-          fecha.setUTCHours(fecha.getUTCHours() + horas);
-          fecha.setUTCMinutes(fecha.getUTCMinutes() + minutos);
-          fecha.setUTCSeconds(fecha.getUTCSeconds() + segundos);
-          //retorna la coleccion de turnos
-          return {
+    // Zona horaria de la base de datos (Oregon, USA) UTC-7
+    const DB_OFFSET = -7 * 60; // en minutos
+    // Zona horaria de Argentina UTC-3
+    const ARG_OFFSET = -3 * 60; // en minutos
+
+    return turnos.map(turno => {
+        const fecha = new Date(turno.fecha);
+        // Restablecer la hora a 0 
+        fecha.setUTCHours(0, 0, 0, 0);
+        
+        // Sumar las horas, minutos y segundos a la fecha 
+        const [horas, minutos, segundos] = turno.horario.split(':').map(Number);
+        fecha.setUTCHours(horas, minutos, segundos, 0);
+
+        // Ajusta la hora de la base de datos a UTC
+        const dbTimeInUTC = new Date(fecha.getTime() + DB_OFFSET * 60 * 1000);
+        // Convierte de UTC a Argentina
+        const argentinaTime = new Date(dbTimeInUTC.getTime() + ARG_OFFSET * 60 * 1000);
+
+        // Retorna la colección de turnos
+        return {
             ...turno,
-            fecha: fecha.toISOString()
-          };
-        });
-      };
+            fecha: argentinaTime.toISOString()
+        };
+    });
+};
