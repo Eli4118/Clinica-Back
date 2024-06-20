@@ -3,19 +3,19 @@ export class administradorModel{
     //todos los pacientes
     static  async getAdministrador(){
         let [result] = await pool.query(
-            "SELECT * FROM administrativo order by CodAdministrativo desc"
+            "SELECT * FROM Administrativo order by CodAdministrativo desc"
             );        
         return result       
     }
     //un paciente 
     static  async getAdministradorId (id)   {
         const [result] = await pool.query(
-            "SELECT * FROM administrativo WHERE CodAdministrativo = ?", id );
+            "SELECT * FROM Administrativo WHERE CodAdministrativo = ?", id );
         return result[0]   
     }
     static  async getAdministradorDni (dni)   {
         const [result] = await pool.query(
-            "SELECT * FROM administrativo WHERE CodAdministrativo = ?", dni );
+            "SELECT * FROM Administrativo WHERE CodAdministrativo = ?", dni );
 
         return result[0]   
     }
@@ -31,7 +31,7 @@ export class administradorModel{
         } = req;
 
         const [result] = await pool.query(
-            "INSERT INTO administrativo (Nombre, Apellido, Documento, Contraseña, usuario) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO Administrativo (Nombre, Apellido, Documento, Contraseña, Usuario) VALUES (?, ?, ?, ?, ?)",
             [Nombre, Apellido, Documento, Contraseña, usuario]
         );
         // Devuelve el ID del paciente recién insertado 
@@ -39,14 +39,14 @@ export class administradorModel{
     }
     static  async updateAdministrador(req,id){
         const [result] = await pool.query(
-            "UPDATE administrativo SET ? WHERE CodAdministrativo = ?", 
+            "UPDATE Administrativo SET ? WHERE CodAdministrativo = ?", 
             [req, id]
             );
         return result.affectedRows
     }
     static  async deleteAdministrador(id){
         const [result] = await pool.query(
-            "DELETE FROM administrativo WHERE CodAdministrativo = ?", id
+            "DELETE FROM Administrativo WHERE CodAdministrativo = ?", id
             );
         return result.affectedRows
     }    
