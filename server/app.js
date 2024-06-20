@@ -5,8 +5,8 @@ import cors from 'cors'
 import { FRONT_URL } from './config.js';
 
 const app = express();//var para usar libreria
-app.use(cors());
-//{origin:FRONT_URL, credentials: true}
+app.use(cors({origin:FRONT_URL, credentials: true}));
+
 
 app.use(express.json());//para recibir jsons
 app.use(cookieParser());
