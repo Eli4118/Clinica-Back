@@ -211,7 +211,7 @@ const sumarHoraAlDia = (turnos) => {
           // Restablecer la hora a 0 
           fecha.setUTCHours(0, 0, 0, 0);  
           // Sumar las horas, minutos y segundos a la fecha 
-          const [horas, minutos, segundos] = turno.horario.split(':').map(Number);
+          const [horas, minutos, segundos] = turno.Horario.split(':').map(Number);
           fecha.setUTCHours(fecha.getUTCHours() + horas);
           fecha.setUTCMinutes(fecha.getUTCMinutes() + minutos);
           fecha.setUTCSeconds(fecha.getUTCSeconds() + segundos);
