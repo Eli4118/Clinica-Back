@@ -4,21 +4,21 @@ export class medicoModel{
     //todos las especialidades
     static  async getEspecialidades (){
         let [result] = await pool.query(
-            "SELECT * FROM especialidad order by CodEspecialidad desc"
+            "SELECT * FROM Especialidad order by CodEspecialidad desc"
             );        
         return result       
     }
     //medicos con una especialidad
     static  async getMedicosEspec (codEspecialidad){
         let [result] = await pool.query(
-            "SELECT * FROM medicopersonal WHERE CodEspecialidad = ?", codEspecialidad );
+            "SELECT * FROM MedicoPersonal WHERE CodEspecialidad = ?", codEspecialidad );
         return result       
     }
 
     //todos los medicos
     static  async getMedicos(){
         let [result] = await pool.query(
-            "SELECT * FROM medicopersonal order by CodMedPersonal desc"  );
+            "SELECT * FROM MedicoPersonal order by CodMedPersonal desc"  );
         return result       
     }
 
@@ -26,7 +26,7 @@ export class medicoModel{
     //un paciente 
     static  async getMedicoId (id)   {
         const [result] = await pool.query(
-            "SELECT * FROM medicopersonal WHERE codEspecialidad = ?", id );
+            "SELECT * FROM MedicoPersonal WHERE CodEspecialidad = ?", id );
         return result[0]   
     }
     static async createMedico(req) {
@@ -47,7 +47,7 @@ export class medicoModel{
 
         // Verifica si el Documento ya existe
         const [existing] = await pool.query(
-            "SELECT Documento FROM medicopersonal WHERE Documento = ?",
+            "SELECT Documento FROM MedicoPersonal WHERE Documento = ?",
             [Documento]
         );
 
@@ -56,7 +56,7 @@ export class medicoModel{
         }
 
         const [result] = await pool.query(
-            "INSERT INTO medicopersonal (Nombre, Apellido, Documento, Domicilio, Telefono, Mail, CodEspecialidad, EsMedico, Matricula, Costo, Contraseña, usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO MedicoPersonal (Nombre, Apellido, Documento, Domicilio, Telefono, Mail, CodEspecialidad, EsMedico, Matricula, Costo, Contraseña, Usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [Nombre, Apellido, Documento, Domicilio, Telefono, Mail, CodEspecialidad, EsMedico, Matricula, Costo, Contraseña, usuario]
         );
 
