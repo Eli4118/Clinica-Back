@@ -3,19 +3,19 @@ export class pacienteModel{
     //todos los pacientes
     static  async getPacientes (){
         let [result] = await pool.query(
-            "SELECT * FROM paciente order by CodPaciente desc"
+            "SELECT * FROM Paciente order by CodPaciente desc"
             );        
         return result       
     }
     //un paciente 
     static  async getPacienteId (id)   {
         const [result] = await pool.query(
-            "SELECT * FROM paciente WHERE CodPaciente = ?", id );
+            "SELECT * FROM Paciente WHERE CodPaciente = ?", id );
         return result[0]   
     }
     static  async getPacienteDni (dni)   {
         const [result] = await pool.query(
-            "SELECT * FROM paciente WHERE Documento = ?", dni );
+            "SELECT * FROM Paciente WHERE Documento = ?", dni );
 
         return result[0]   
     }
